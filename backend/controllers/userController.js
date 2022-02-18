@@ -8,7 +8,6 @@ const { errorHandler } = require('../middleware/errorMiddleware');
 // @desc    Register a new user
 // @route   /api/users
 // @access  Public
-
 const registerUser = asyncHandler (async (req, res) => {
     const { name, email, password } = req.body
     
@@ -55,8 +54,8 @@ const registerUser = asyncHandler (async (req, res) => {
 // @route   /api/users/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password }
-    res.send('Login Route') = req.body
+    const { email, password }= req.body
+    // res.send('Login Route') = req.body
 
     const user = await User.findOne({ email })
     
@@ -74,6 +73,18 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 })
 
+// @desc    Get current user
+// @route   /api/users/me
+// @access  Public
+const getMe = asyncHandler(async (req, res) => { 
+    const user = {
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name
+    }
+    res.status(200).json(user)
+})
+    
 // Generate token
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -83,5 +94,6 @@ const generateToken = (id) => {
 }
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getMe
 }
